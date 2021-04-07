@@ -2,12 +2,10 @@ package com.nnk.springboot.domain;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.repositories.CurvePointRepository;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

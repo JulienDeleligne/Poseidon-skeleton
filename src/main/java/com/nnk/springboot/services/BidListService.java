@@ -28,7 +28,4 @@ public class BidListService {
     bidListRepository.deleteById(id);
   }
 
-  public void deleteAll() {
-    bidListRepository.deleteAll();
-  }
 }

@@ -2,11 +2,9 @@ package com.nnk.springboot.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.repositories.TradeRepository;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

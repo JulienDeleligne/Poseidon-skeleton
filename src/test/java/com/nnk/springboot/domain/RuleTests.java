@@ -2,7 +2,6 @@ package com.nnk.springboot.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.repositories.RuleNameRepository;
 import java.util.List;
 import java.util.Optional;
