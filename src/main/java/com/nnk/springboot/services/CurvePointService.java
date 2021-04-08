@@ -28,5 +28,4 @@ public class CurvePointService {
   public void delete(Integer id) {
     curvePointRepository.deleteById(id);
   }
-
 }
