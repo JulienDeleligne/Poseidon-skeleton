@@ -2,6 +2,7 @@ package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +20,7 @@ public class UserController {
   @Autowired
   private UserRepository userRepository;
 
+  @RolesAllowed("ADMIN")
   @RequestMapping("/user/list")
   public String home(Model model) {
     model.addAttribute("users", userRepository.findAll());
