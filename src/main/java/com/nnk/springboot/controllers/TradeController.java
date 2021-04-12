@@ -1,6 +1,5 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.services.TradeService;
 import javax.validation.Valid;
@@ -46,7 +45,6 @@ public class TradeController {
     return "trade/update";
   }
 
-  // TODO : Quels champs sont utiles ?
   @PostMapping("/trade/update/{id}")
   public String updateTrade(@PathVariable("id") Integer id, @Valid Trade tradeToSave,
       BindingResult result, Model model) {

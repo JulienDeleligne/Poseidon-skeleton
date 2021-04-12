@@ -1,14 +1,25 @@
 package com.nnk.springboot.domain;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-public class BidTests {
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-//	@Autowired
-//	private BidListRepository bidListRepository;
-/*
-	@Test
-	public void bidListTest() {
+import com.nnk.springboot.repositories.BidListRepository;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+class BidTests {
+
+  @Autowired
+  private BidListRepository bidListRepository;
+
+  @Test
+  void bidListTest() {
     BidList bid = new BidList("Account Test", "Type Test", 10d);
 
     // Save
@@ -30,5 +41,5 @@ public class BidTests {
     bidListRepository.delete(bid);
     Optional<BidList> bidList = bidListRepository.findById(id);
     assertThat(bidList).isNotPresent();
-  }*/
+  }
 }

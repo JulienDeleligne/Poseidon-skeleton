@@ -19,9 +19,12 @@ public class BidListController {
   @Autowired
   private BidListService bidListService;
 
+  private String bidListLink = "bidList";
+  private String bidListRedirect = "redirect:/bidList/list";
+
   @RequestMapping("/bidList/list")
   public String home(Model model) {
-    model.addAttribute("bidList", bidListService.findAll());
+    model.addAttribute(bidListLink, bidListService.findAll());
     return "bidList/list";
   }
 
@@ -34,15 +37,15 @@ public class BidListController {
   public String validate(@Valid BidList bid, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       bidListService.save(bid);
-      model.addAttribute("bidList", bidListService.findAll());
-      return "redirect:/bidList/list";
+      model.addAttribute(bidListLink, bidListService.findAll());
+      return bidListRedirect;
     }
     return "bidList/add";
   }
 
   @GetMapping("/bidList/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("bidList", bidListService.findById(id));
+    model.addAttribute(bidListLink, bidListService.findById(id));
     return "bidList/update";
   }
 
@@ -55,14 +58,14 @@ public class BidListController {
     BidList bidList = bidListService.findById(id);
     bidList.setBidQuantity(bidListToSave.getBidQuantity());
     bidListService.save(bidList);
-    model.addAttribute("bidList", bidListService.findAll());
-    return "redirect:/bidList/list";
+    model.addAttribute(bidListLink, bidListService.findAll());
+    return bidListRedirect;
   }
 
   @GetMapping("/bidList/delete/{id}")
   public String deleteBid(@PathVariable("id") Integer id, Model model) {
     bidListService.delete(bidListService.findById(id).getBidListId());
-    model.addAttribute("bidList", bidListService.findAll());
-    return "redirect:/bidList/list";
+    model.addAttribute(bidListLink, bidListService.findAll());
+    return bidListRedirect;
   }
 }
