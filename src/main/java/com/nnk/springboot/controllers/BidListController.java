@@ -19,8 +19,8 @@ public class BidListController {
   @Autowired
   private BidListService bidListService;
 
-  private String bidListLink = "bidList";
-  private String bidListRedirect = "redirect:/bidList/list";
+  private final String bidListLink = "bidList";
+  private final String bidListRedirect = "redirect:/bidList/list";
 
   @RequestMapping("/bidList/list")
   public String home(Model model) {
