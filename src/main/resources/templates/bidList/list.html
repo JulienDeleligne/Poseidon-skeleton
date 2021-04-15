@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'
       xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec='http://www.thymeleaf.org/thymeleaf-extras-springsecurity5'>
 
 <head>
   <meta charset='utf-8'/>
@@ -17,9 +17,9 @@
       <a href='/rating/list'>Ratings</a>&nbsp;|&nbsp;
       <a href='/trade/list'>Trade</a>&nbsp;|&nbsp;
       <a href='/ruleName/list'>Rule</a>&nbsp;|&nbsp;
-      <sec:authorize access="hasRole('ADMIN')">
+      <div sec:authorize="hasAuthority('ADMIN')">
         <a href='/user/list'>User</a>
-      </sec:authorize>
+      </div>
     </div>
     <div class='col-6 text-right'>
       Logged in user: <b th:inline='text' class='user'> [[${#httpServletRequest.remoteUser}]] </b>
