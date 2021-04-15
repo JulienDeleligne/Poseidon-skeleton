@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class BidListController {
 
+  private static final String BIDLISTLINK = "bidList";
+  private static final String BIDLISTREDIRECT = "redirect:/bidList/list";
+
   @Autowired
   private BidListService bidListService;
 
-  private final String bidListLink = "bidList";
-  private final String bidListRedirect = "redirect:/bidList/list";
-
   @RequestMapping("/bidList/list")
   public String home(Model model) {
-    model.addAttribute(bidListLink, bidListService.findAll());
+    model.addAttribute(BIDLISTLINK, bidListService.findAll());
     return "bidList/list";
   }
 
   @GetMapping("/bidList/add")
-  public String addBidForm(BidList bid) {
+  public String addBidForm() {
     return "bidList/add";
   }
 
@@ -37,15 +37,15 @@ public class BidListController {
   public String validate(@Valid BidList bid, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       bidListService.save(bid);
-      model.addAttribute(bidListLink, bidListService.findAll());
-      return bidListRedirect;
+      model.addAttribute(BIDLISTLINK, bidListService.findAll());
+      return BIDLISTREDIRECT;
     }
     return "bidList/add";
   }
 
   @GetMapping("/bidList/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute(bidListLink, bidListService.findById(id));
+    model.addAttribute(BIDLISTLINK, bidListService.findById(id));
     return "bidList/update";
   }
 
@@ -55,17 +55,15 @@ public class BidListController {
     if (result.hasErrors()) {
       return "bidList/update";
     }
-    BidList bidList = bidListService.findById(id);
-    bidList.setBidQuantity(bidListToSave.getBidQuantity());
-    bidListService.save(bidList);
-    model.addAttribute(bidListLink, bidListService.findAll());
-    return bidListRedirect;
+    bidListService.update(bidListToSave, id);
+    model.addAttribute(BIDLISTLINK, bidListService.findAll());
+    return BIDLISTREDIRECT;
   }
 
   @GetMapping("/bidList/delete/{id}")
   public String deleteBid(@PathVariable("id") Integer id, Model model) {
-    bidListService.delete(bidListService.findById(id).getBidListId());
-    model.addAttribute(bidListLink, bidListService.findAll());
-    return bidListRedirect;
+    bidListService.delete(id);
+    model.addAttribute(BIDLISTLINK, bidListService.findAll());
+    return BIDLISTREDIRECT;
   }
 }

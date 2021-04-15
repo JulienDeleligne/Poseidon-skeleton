@@ -5,8 +5,11 @@ import com.nnk.springboot.repositories.RatingRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
+@Transactional
 public class RatingService {
 
   @Autowired
@@ -17,6 +20,7 @@ public class RatingService {
   }
 
   public void save(Rating rating) {
+    Assert.notNull(rating, "Rating must not be null");
     ratingRepository.save(rating);
   }
 
@@ -26,6 +30,15 @@ public class RatingService {
   }
 
   public void delete(Integer id) {
-    ratingRepository.deleteById(id);
+    ratingRepository.deleteById(findById(id).getId());
+  }
+
+  public void update(Rating ratingToSave, Integer id) {
+    Rating rating = findById(id);
+    rating.setMoodysRating(ratingToSave.getMoodysRating());
+    rating.setSandPRating(ratingToSave.getSandPRating());
+    rating.setFitchRating(ratingToSave.getFitchRating());
+    rating.setOrderNumber(ratingToSave.getOrderNumber());
+    save(rating);
   }
 }

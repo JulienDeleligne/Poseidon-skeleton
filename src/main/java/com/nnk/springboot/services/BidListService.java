@@ -5,8 +5,11 @@ import com.nnk.springboot.repositories.BidListRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
+@Transactional
 public class BidListService {
 
   @Autowired
@@ -17,6 +20,7 @@ public class BidListService {
   }
 
   public void save(BidList bid) {
+    Assert.notNull(bid, "BidList must not be null");
     bidListRepository.save(bid);
   }
 
@@ -25,7 +29,12 @@ public class BidListService {
   }
 
   public void delete(Integer id) {
-    bidListRepository.deleteById(id);
+    bidListRepository.deleteById(findById(id).getBidListId());
   }
 
+  public void update(BidList bidListToSave, Integer id) {
+    BidList bidList = findById(id);
+    bidList.setBidQuantity(bidListToSave.getBidQuantity());
+    save(bidList);
+  }
 }

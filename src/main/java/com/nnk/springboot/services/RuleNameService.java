@@ -5,8 +5,11 @@ import com.nnk.springboot.repositories.RuleNameRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
+@Transactional
 public class RuleNameService {
 
   @Autowired
@@ -17,6 +20,8 @@ public class RuleNameService {
   }
 
   public void save(RuleName ruleName) {
+
+    Assert.notNull(ruleName, "RuleName must not be null");
     ruleNameRepository.save(ruleName);
   }
 
@@ -26,6 +31,17 @@ public class RuleNameService {
   }
 
   public void delete(Integer id) {
-    ruleNameRepository.deleteById(id);
+    ruleNameRepository.deleteById(findById(id).getId());
+  }
+
+  public void update(RuleName ruleNameToSave, Integer id) {
+    RuleName ruleName = findById(id);
+    ruleName.setName(ruleNameToSave.getName());
+    ruleName.setDescription(ruleNameToSave.getDescription());
+    ruleName.setJson(ruleNameToSave.getJson());
+    ruleName.setTemplate(ruleNameToSave.getTemplate());
+    ruleName.setSqlStr(ruleNameToSave.getSqlStr());
+    ruleName.setSqlPart(ruleNameToSave.getSqlPart());
+    save(ruleName);
   }
 }

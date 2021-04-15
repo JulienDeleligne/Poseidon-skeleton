@@ -15,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CurveController {
 
+  private static final String CURVEPOINTLINK = "curvePoint";
+  private static final String CURVEPOINTREDIRECT = "redirect:/curvePoint/list";
+
   @Autowired
   private CurvePointService curvePointService;
 
   @RequestMapping("/curvePoint/list")
   public String home(Model model) {
-    model.addAttribute("curvePoint", curvePointService.findAll());
+    model.addAttribute(CURVEPOINTLINK, curvePointService.findAll());
     return "curvePoint/list";
   }
 
   @GetMapping("/curvePoint/add")
-  public String addCurvePointForm(CurvePoint curvePoint) {
+  public String addCurvePointForm() {
     return "curvePoint/add";
   }
 
@@ -33,15 +36,15 @@ public class CurveController {
   public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       curvePointService.save(curvePoint);
-      model.addAttribute("curvePoint", curvePointService.findAll());
-      return "redirect:/curvePoint/list";
+      model.addAttribute(CURVEPOINTLINK, curvePointService.findAll());
+      return CURVEPOINTREDIRECT;
     }
     return "curvePoint/add";
   }
 
   @GetMapping("/curvePoint/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("curvePoint", curvePointService.findById(id));
+    model.addAttribute(CURVEPOINTLINK, curvePointService.findById(id));
     return "curvePoint/update";
   }
 
@@ -51,19 +54,15 @@ public class CurveController {
     if (result.hasErrors()) {
       return "curvePoint/update";
     }
-    CurvePoint curvePoint = curvePointService.findById(id);
-    curvePoint.setCurveId(curvePointToSave.getCurveId());
-    curvePoint.setTerm(curvePointToSave.getTerm());
-    curvePoint.setValue(curvePointToSave.getValue());
-    curvePointService.save(curvePoint);
-    model.addAttribute("curvePoint", curvePointService.findAll());
-    return "redirect:/curvePoint/list";
+    curvePointService.update(curvePointToSave, id);
+    model.addAttribute(CURVEPOINTLINK, curvePointService.findAll());
+    return CURVEPOINTREDIRECT;
   }
 
   @GetMapping("/curvePoint/delete/{id}")
   public String deleteBid(@PathVariable("id") Integer id, Model model) {
-    curvePointService.delete(curvePointService.findById(id).getId());
-    model.addAttribute("curvePoint", curvePointService.findAll());
-    return "redirect:/curvePoint/list";
+    curvePointService.delete(id);
+    model.addAttribute(CURVEPOINTLINK, curvePointService.findAll());
+    return CURVEPOINTREDIRECT;
   }
 }

@@ -15,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class TradeController {
 
+  private static final String TRADELINK = "trade";
+  private static final String TRADEREDIRECT = "redirect:/trade/list";
+
   @Autowired
   private TradeService tradeService;
 
   @RequestMapping("/trade/list")
   public String home(Model model) {
-    model.addAttribute("trade", tradeService.findAll());
+    model.addAttribute(TRADELINK, tradeService.findAll());
     return "trade/list";
   }
 
   @GetMapping("/trade/add")
-  public String addUser(Trade trade) {
+  public String addUser() {
     return "trade/add";
   }
 
@@ -33,15 +36,15 @@ public class TradeController {
   public String validate(@Valid Trade trade, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       tradeService.save(trade);
-      model.addAttribute("curvePoint", tradeService.findAll());
-      return "redirect:/trade/list";
+      model.addAttribute(TRADELINK, tradeService.findAll());
+      return TRADEREDIRECT;
     }
     return "trade/add";
   }
 
   @GetMapping("/trade/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("trade", tradeService.findById(id));
+    model.addAttribute(TRADELINK, tradeService.findById(id));
     return "trade/update";
   }
 
@@ -51,19 +54,15 @@ public class TradeController {
     if (result.hasErrors()) {
       return "curvePoint/update";
     }
-    Trade trade = tradeService.findById(id);
-    trade.setAccount(tradeToSave.getAccount());
-    trade.setType(tradeToSave.getType());
-    trade.setBuyQuantity(tradeToSave.getBuyQuantity());
-    tradeService.save(trade);
-    model.addAttribute("trade", tradeService.findAll());
-    return "redirect:/trade/list";
+    tradeService.update(tradeToSave, id);
+    model.addAttribute(TRADELINK, tradeService.findAll());
+    return TRADEREDIRECT;
   }
 
   @GetMapping("/trade/delete/{id}")
   public String deleteTrade(@PathVariable("id") Integer id, Model model) {
-    tradeService.delete(tradeService.findById(id).getTradeId());
-    model.addAttribute("trade", tradeService.findAll());
-    return "redirect:/trade/list";
+    tradeService.delete(id);
+    model.addAttribute(TRADELINK, tradeService.findAll());
+    return TRADEREDIRECT;
   }
 }

@@ -15,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RatingController {
 
+  private static final String RATINGLINK = "rating";
+  private static final String RATINGREDIRECT = "redirect:/rating/list";
+
   @Autowired
   private RatingService ratingService;
 
   @RequestMapping("/rating/list")
   public String home(Model model) {
-    model.addAttribute("rating", ratingService.findAll());
+    model.addAttribute(RATINGLINK, ratingService.findAll());
     return "rating/list";
   }
 
   @GetMapping("/rating/add")
-  public String addRatingForm(Rating rating) {
+  public String addRatingForm() {
     return "rating/add";
   }
 
@@ -33,15 +36,15 @@ public class RatingController {
   public String validate(@Valid Rating rating, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       ratingService.save(rating);
-      model.addAttribute("rating", ratingService.findAll());
-      return "redirect:/rating/list";
+      model.addAttribute(RATINGLINK, ratingService.findAll());
+      return RATINGREDIRECT;
     }
     return "rating/add";
   }
 
   @GetMapping("/rating/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("rating", ratingService.findById(id));
+    model.addAttribute(RATINGLINK, ratingService.findById(id));
     return "rating/update";
   }
 
@@ -51,20 +54,15 @@ public class RatingController {
     if (result.hasErrors()) {
       return "rating/update";
     }
-    Rating rating = ratingService.findById(id);
-    rating.setMoodysRating(ratingToSave.getMoodysRating());
-    rating.setSandPRating(ratingToSave.getSandPRating());
-    rating.setFitchRating(ratingToSave.getFitchRating());
-    rating.setOrderNumber(ratingToSave.getOrderNumber());
-    ratingService.save(rating);
-    model.addAttribute("rating", ratingService.findAll());
-    return "redirect:/rating/list";
+    ratingService.update(ratingToSave, id);
+    model.addAttribute(RATINGLINK, ratingService.findAll());
+    return RATINGREDIRECT;
   }
 
   @GetMapping("/rating/delete/{id}")
   public String deleteRating(@PathVariable("id") Integer id, Model model) {
-    ratingService.delete(ratingService.findById(id).getId());
-    model.addAttribute("rating", ratingService.findAll());
-    return "redirect:/rating/list";
+    ratingService.delete(id);
+    model.addAttribute(RATINGLINK, ratingService.findAll());
+    return RATINGREDIRECT;
   }
 }

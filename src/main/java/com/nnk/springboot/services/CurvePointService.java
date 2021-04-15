@@ -5,8 +5,11 @@ import com.nnk.springboot.repositories.CurvePointRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
+@Transactional
 public class CurvePointService {
 
   @Autowired
@@ -17,6 +20,7 @@ public class CurvePointService {
   }
 
   public void save(CurvePoint curvePoint) {
+    Assert.notNull(curvePoint, "CurvePoint must not be null");
     curvePointRepository.save(curvePoint);
   }
 
@@ -26,6 +30,14 @@ public class CurvePointService {
   }
 
   public void delete(Integer id) {
-    curvePointRepository.deleteById(id);
+    curvePointRepository.deleteById(findById(id).getId());
+  }
+
+  public void update(CurvePoint curvePointToSave, Integer id) {
+    CurvePoint curvePoint = findById(id);
+    curvePoint.setCurveId(curvePointToSave.getCurveId());
+    curvePoint.setTerm(curvePointToSave.getTerm());
+    curvePoint.setValue(curvePointToSave.getValue());
+    save(curvePoint);
   }
 }

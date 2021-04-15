@@ -15,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RuleNameController {
 
+  private static final String RULENAMELINK = "ruleName";
+  private static final String RULENAMEREDIRECT = "redirect:/ruleName/list";
+
   @Autowired
   private RuleNameService ruleNameService;
 
   @RequestMapping("/ruleName/list")
   public String home(Model model) {
-    model.addAttribute("ruleName", ruleNameService.findAll());
+    model.addAttribute(RULENAMELINK, ruleNameService.findAll());
     return "ruleName/list";
   }
 
   @GetMapping("/ruleName/add")
-  public String addRuleForm(RuleName ruleName) {
+  public String addRuleForm() {
     return "ruleName/add";
   }
 
@@ -33,15 +36,15 @@ public class RuleNameController {
   public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
     if (!result.hasErrors()) {
       ruleNameService.save(ruleName);
-      model.addAttribute("ruleName", ruleNameService.findAll());
-      return "redirect:/ruleName/list";
+      model.addAttribute(RULENAMELINK, ruleNameService.findAll());
+      return RULENAMEREDIRECT;
     }
     return "ruleName/add";
   }
 
   @GetMapping("/ruleName/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("ruleName", ruleNameService.findById(id));
+    model.addAttribute(RULENAMELINK, ruleNameService.findById(id));
     return "ruleName/update";
   }
 
@@ -51,22 +54,15 @@ public class RuleNameController {
     if (result.hasErrors()) {
       return "ruleName/update";
     }
-    RuleName ruleName = ruleNameService.findById(id);
-    ruleName.setName(ruleNameToSave.getName());
-    ruleName.setDescription(ruleNameToSave.getDescription());
-    ruleName.setJson(ruleNameToSave.getJson());
-    ruleName.setTemplate(ruleNameToSave.getTemplate());
-    ruleName.setSqlStr(ruleNameToSave.getSqlStr());
-    ruleName.setSqlPart(ruleNameToSave.getSqlPart());
-    ruleNameService.save(ruleName);
-    model.addAttribute("ruleName", ruleNameService.findAll());
-    return "redirect:/ruleName/list";
+    ruleNameService.update(ruleNameToSave, id);
+    model.addAttribute(RULENAMELINK, ruleNameService.findAll());
+    return RULENAMEREDIRECT;
   }
 
   @GetMapping("/ruleName/delete/{id}")
   public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-    ruleNameService.delete(ruleNameService.findById(id).getId());
-    model.addAttribute("ruleName", ruleNameService.findAll());
-    return "redirect:/ruleName/list";
+    ruleNameService.delete(id);
+    model.addAttribute(RULENAMELINK, ruleNameService.findAll());
+    return RULENAMEREDIRECT;
   }
 }
