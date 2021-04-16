@@ -4,7 +4,7 @@
 <head>
   <meta charset='utf-8'/>
   <title>Home</title>
-  <link rel='stylesheet' type='text/css' href='../../css/bootstrap.min.css'>
+  <link href='../../css/bootstrap.min.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <div class='container'>
@@ -18,7 +18,7 @@
   </div>
   <div class='row'><h2>User List</h2></div>
   <div class='row'>
-    <a href='/user/add' class='btn btn-primary btn-sm'>Add New</a>
+    <a class='btn btn-primary btn-sm' href='/user/add'>Add New</a>
     <table class='table table-bordered'>
       <thead>
       <tr>
@@ -35,7 +35,7 @@
         <td th:text='${user.fullName}'></td>
         <td th:text='${user.username}'></td>
         <td style='width: 25%' th:text='${user.role}'></td>
-        <td style='width: 15%' class='text-center'>
+        <td class='text-center' style='width: 15%'>
           <a th:href='@{/user/update/{id}(id=${user.id})}'>Edit</a>&nbsp;|&nbsp;
           <a th:href='@{/user/delete/{id}(id=${user.id})}'>Delete</a>
         </td>
