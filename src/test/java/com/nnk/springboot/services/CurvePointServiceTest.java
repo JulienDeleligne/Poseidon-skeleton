@@ -19,6 +19,10 @@ import org.mockito.MockitoAnnotations;
 
 class CurvePointServiceTest {
 
+  private static final int TWELVE = 12;
+  private static final int NINETY_EIGHT = 98;
+  private static final int NINETY_NINE = 99;
+
   @InjectMocks
   CurvePointService curvePointService;
   @Mock
@@ -49,7 +53,7 @@ class CurvePointServiceTest {
   @DisplayName("When saving a valid object, then assert that the repository is called")
   void saveValid() {
     // ACT
-    curvePointService.save(CurvePoint.builder().curveId(12).build());
+    curvePointService.save(CurvePoint.builder().curveId(TWELVE).build());
     // ASSERT
     verify(curvePointRepository, times(1)).save(any());
   }
@@ -58,58 +62,60 @@ class CurvePointServiceTest {
   @DisplayName("When finding a null object, then assert that an IllegalArgumentException is thrown")
   void findByIdNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> curvePointService.findById(99));
+        .isThrownBy(() -> curvePointService.findById(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When finding a valid object, then assert that the object is returned")
   void findByIdValid() {
     // ARRANGE
-    when(curvePointRepository.findById(98))
-        .thenReturn(Optional.of(CurvePoint.builder().id(98).curveId(12).build()));
+    when(curvePointRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(CurvePoint.builder().id(NINETY_EIGHT).curveId(TWELVE).build()));
     // ACT
-    CurvePoint curvePoint = curvePointService.findById(98);
+    CurvePoint curvePoint = curvePointService.findById(NINETY_EIGHT);
     // ASSERT
-    assertThat(curvePoint.getCurveId()).isEqualTo(12);
+    assertThat(curvePoint.getCurveId()).isEqualTo(TWELVE);
   }
 
   @Test
   @DisplayName("When deleting a null object, then assert that an IllegalArgumentException is thrown")
   void deleteNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> curvePointService.delete(99));
+        .isThrownBy(() -> curvePointService.delete(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When saving a valid object, then assert that the repository is called")
   void deleteValid() {
     // ARRANGE
-    when(curvePointRepository.findById(98)).thenReturn(Optional.of(CurvePoint.builder().id(98).build()));
+    when(curvePointRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(CurvePoint.builder().id(NINETY_EIGHT).build()));
     // ACT
-    curvePointService.delete(98);
+    curvePointService.delete(NINETY_EIGHT);
     // ASSERT
-    verify(curvePointRepository, times(1)).deleteById(98);
+    verify(curvePointRepository, times(1)).deleteById(NINETY_EIGHT);
   }
 
   @Test
   @DisplayName("When updating a null object, then assert that an IllegalArgumentException is thrown")
   void updateNull() {
     // ARRANGE
-    CurvePoint curvePoint = CurvePoint.builder().id(99).curveId(12).build();
+    CurvePoint curvePoint = CurvePoint.builder().id(NINETY_NINE).curveId(TWELVE).build();
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> curvePointService.update(curvePoint, 99));
+        .isThrownBy(() -> curvePointService.update(curvePoint, NINETY_NINE));
   }
 
   @Test
   @DisplayName("When updating a valid object, then assert that the repository is called")
   void updateValid() {
     // ARRANGE
-    when(curvePointRepository.findById(98)).thenReturn(Optional.of(CurvePoint.builder().id(98).curveId(24).build()));
-    CurvePoint curvePoint = CurvePoint.builder().curveId(12).build();
+    when(curvePointRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(CurvePoint.builder().id(NINETY_EIGHT).curveId(24).build()));
+    CurvePoint curvePoint = CurvePoint.builder().curveId(TWELVE).build();
     // ACT
-    curvePointService.update(curvePoint, 98);
+    curvePointService.update(curvePoint, NINETY_EIGHT);
     // ASSERT
-    verify(curvePointRepository, times(1)).save(CurvePoint.builder().id(98).curveId(12).build());
+    verify(curvePointRepository, times(1)).save(CurvePoint.builder().id(NINETY_EIGHT).curveId(TWELVE).build());
   }
 }
 

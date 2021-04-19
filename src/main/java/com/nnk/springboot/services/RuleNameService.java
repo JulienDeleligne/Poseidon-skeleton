@@ -26,6 +26,7 @@ public class RuleNameService {
   }
 
   public RuleName findById(Integer id) {
+    Assert.notNull(id, "id must not be null");
     return ruleNameRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Invalid RuleName Id:" + id));
   }
@@ -35,6 +36,7 @@ public class RuleNameService {
   }
 
   public void update(RuleName ruleNameToSave, Integer id) {
+    Assert.notNull(ruleNameToSave, "RuleNameToSave must not be null");
     RuleName ruleName = findById(id);
     ruleName.setName(ruleNameToSave.getName());
     ruleName.setDescription(ruleNameToSave.getDescription());

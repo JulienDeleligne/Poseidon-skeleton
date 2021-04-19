@@ -19,6 +19,10 @@ import org.mockito.MockitoAnnotations;
 
 class BidListServiceTest {
 
+  private static final int TWELVE = 12;
+  private static final int NINETY_EIGHT = 98;
+  private static final int NINETY_NINE = 99;
+
   @InjectMocks
   BidListService bidListService;
   @Mock
@@ -58,17 +62,17 @@ class BidListServiceTest {
   @DisplayName("When finding a null object, then assert that an IllegalArgumentException is thrown")
   void findByIdNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> bidListService.findById(99));
+        .isThrownBy(() -> bidListService.findById(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When finding a valid object, then assert that the object is returned")
   void findByIdValid() {
     // ARRANGE
-    when(bidListRepository.findById(98))
+    when(bidListRepository.findById(NINETY_EIGHT))
         .thenReturn(Optional.of(BidList.builder().account("account").type("type").build()));
     // ACT
-    BidList bidList = bidListService.findById(98);
+    BidList bidList = bidListService.findById(NINETY_EIGHT);
     // ASSERT
     assertThat(bidList.getAccount()).isEqualTo("account");
     assertThat(bidList.getType()).isEqualTo("type");
@@ -78,18 +82,19 @@ class BidListServiceTest {
   @DisplayName("When deleting a null object, then assert that an IllegalArgumentException is thrown")
   void deleteNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> bidListService.delete(99));
+        .isThrownBy(() -> bidListService.delete(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When saving a valid object, then assert that the repository is called")
   void deleteValid() {
     // ARRANGE
-    when(bidListRepository.findById(98)).thenReturn(Optional.of(BidList.builder().bidListId(98).build()));
+    when(bidListRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(BidList.builder().bidListId(NINETY_EIGHT).build()));
     // ACT
-    bidListService.delete(98);
+    bidListService.delete(NINETY_EIGHT);
     // ASSERT
-    verify(bidListRepository, times(1)).deleteById(98);
+    verify(bidListRepository, times(1)).deleteById(NINETY_EIGHT);
   }
 
   @Test
@@ -98,18 +103,19 @@ class BidListServiceTest {
     // ARRANGE
     BidList bidList = BidList.builder().account("account").type("type").build();
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> bidListService.update(bidList, 99));
+        .isThrownBy(() -> bidListService.update(bidList, NINETY_NINE));
   }
 
   @Test
   @DisplayName("When updating a valid object, then assert that the repository is called")
   void updateValid() {
     // ARRANGE
-    when(bidListRepository.findById(98)).thenReturn(Optional.of(BidList.builder().bidListId(98).build()));
+    when(bidListRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(BidList.builder().bidListId(NINETY_EIGHT).build()));
     BidList bidList = BidList.builder().account("account").type("type").bidQuantity(12.00).build();
     // ACT
-    bidListService.update(bidList, 98);
+    bidListService.update(bidList, NINETY_EIGHT);
     // ASSERT
-    verify(bidListRepository, times(1)).save(BidList.builder().bidListId(98).bidQuantity(12.00).build());
+    verify(bidListRepository, times(1)).save(BidList.builder().bidListId(NINETY_EIGHT).bidQuantity(12.00).build());
   }
 }

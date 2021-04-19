@@ -25,6 +25,7 @@ public class BidListService {
   }
 
   public BidList findById(Integer id) {
+    Assert.notNull(id, "id must not be null");
     return bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
   }
 
@@ -33,6 +34,7 @@ public class BidListService {
   }
 
   public void update(BidList bidListToSave, Integer id) {
+    Assert.notNull(bidListToSave, "BidListToSave must not be null");
     BidList bidList = findById(id);
     bidList.setBidQuantity(bidListToSave.getBidQuantity());
     save(bidList);

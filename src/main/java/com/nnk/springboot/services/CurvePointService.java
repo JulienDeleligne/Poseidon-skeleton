@@ -25,6 +25,7 @@ public class CurvePointService {
   }
 
   public CurvePoint findById(Integer id) {
+    Assert.notNull(id, "id must not be null");
     return curvePointRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
   }
@@ -34,6 +35,7 @@ public class CurvePointService {
   }
 
   public void update(CurvePoint curvePointToSave, Integer id) {
+    Assert.notNull(curvePointToSave, "CurvePointToSave must not be null");
     CurvePoint curvePoint = findById(id);
     curvePoint.setCurveId(curvePointToSave.getCurveId());
     curvePoint.setTerm(curvePointToSave.getTerm());

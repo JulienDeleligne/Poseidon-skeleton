@@ -25,6 +25,7 @@ public class RatingService {
   }
 
   public Rating findById(Integer id) {
+    Assert.notNull(id, "id must not be null");
     return ratingRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Invalid Rating Id:" + id));
   }
@@ -34,6 +35,7 @@ public class RatingService {
   }
 
   public void update(Rating ratingToSave, Integer id) {
+    Assert.notNull(ratingToSave, "RatingToSave must not be null");
     Rating rating = findById(id);
     rating.setMoodysRating(ratingToSave.getMoodysRating());
     rating.setSandPRating(ratingToSave.getSandPRating());

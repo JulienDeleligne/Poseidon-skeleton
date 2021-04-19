@@ -19,6 +19,9 @@ import org.mockito.MockitoAnnotations;
 
 class TradeServiceTest {
 
+  private static final int NINETY_EIGHT = 98;
+  private static final int NINETY_NINE = 99;
+
   @InjectMocks
   TradeService tradeService;
   @Mock
@@ -58,17 +61,17 @@ class TradeServiceTest {
   @DisplayName("When finding a null object, then assert that an IllegalArgumentException is thrown")
   void findByIdNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> tradeService.findById(99));
+        .isThrownBy(() -> tradeService.findById(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When finding a valid object, then assert that the object is returned")
   void findByIdValid() {
     // ARRANGE
-    when(tradeRepository.findById(98))
-        .thenReturn(Optional.of(Trade.builder().tradeId(98).account("good").build()));
+    when(tradeRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(Trade.builder().tradeId(NINETY_EIGHT).account("good").build()));
     // ACT
-    Trade trade = tradeService.findById(98);
+    Trade trade = tradeService.findById(NINETY_EIGHT);
     // ASSERT
     assertThat(trade.getAccount()).isEqualTo("good");
   }
@@ -77,38 +80,39 @@ class TradeServiceTest {
   @DisplayName("When deleting a null object, then assert that an IllegalArgumentException is thrown")
   void deleteNull() {
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> tradeService.delete(99));
+        .isThrownBy(() -> tradeService.delete(NINETY_NINE));
   }
 
   @Test
   @DisplayName("When saving a valid object, then assert that the repository is called")
   void deleteValid() {
     // ARRANGE
-    when(tradeRepository.findById(98)).thenReturn(Optional.of(Trade.builder().tradeId(98).build()));
+    when(tradeRepository.findById(NINETY_EIGHT)).thenReturn(Optional.of(Trade.builder().tradeId(NINETY_EIGHT).build()));
     // ACT
-    tradeService.delete(98);
+    tradeService.delete(NINETY_EIGHT);
     // ASSERT
-    verify(tradeRepository, times(1)).deleteById(98);
+    verify(tradeRepository, times(1)).deleteById(NINETY_EIGHT);
   }
 
   @Test
   @DisplayName("When updating a null object, then assert that an IllegalArgumentException is thrown")
   void updateNull() {
     // ARRANGE
-    Trade trade = Trade.builder().tradeId(99).build();
+    Trade trade = Trade.builder().tradeId(NINETY_NINE).build();
     Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> tradeService.update(trade, 99));
+        .isThrownBy(() -> tradeService.update(trade, NINETY_NINE));
   }
 
   @Test
   @DisplayName("When updating a valid object, then assert that the repository is called")
   void updateValid() {
     // ARRANGE
-    when(tradeRepository.findById(98)).thenReturn(Optional.of(Trade.builder().tradeId(98).account("bad").build()));
+    when(tradeRepository.findById(NINETY_EIGHT))
+        .thenReturn(Optional.of(Trade.builder().tradeId(NINETY_EIGHT).account("bad").build()));
     Trade trade = Trade.builder().account("good").build();
     // ACT
-    tradeService.update(trade, 98);
+    tradeService.update(trade, NINETY_EIGHT);
     // ASSERT
-    verify(tradeRepository, times(1)).save(Trade.builder().tradeId(98).account("good").build());
+    verify(tradeRepository, times(1)).save(Trade.builder().tradeId(NINETY_EIGHT).account("good").build());
   }
 }

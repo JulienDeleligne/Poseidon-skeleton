@@ -25,6 +25,7 @@ public class TradeService {
   }
 
   public Trade findById(Integer id) {
+    Assert.notNull(id, "id must not be null");
     return tradeRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Invalid Trade Id:" + id));
   }
@@ -34,6 +35,7 @@ public class TradeService {
   }
 
   public void update(Trade tradeToSave, Integer id) {
+    Assert.notNull(tradeToSave, "TradeToSave must not be null");
     Trade trade = findById(id);
     trade.setAccount(tradeToSave.getAccount());
     trade.setType(tradeToSave.getType());
