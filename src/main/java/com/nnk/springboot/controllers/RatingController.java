@@ -1,6 +1,9 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Rating;
+import com.nnk.springboot.services.RatingService;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,46 +12,90 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
-
+/**
+ * Controller for the Rating.
+ */
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
 
-    @RequestMapping("/rating/list")
-    public String home(Model model)
-    {
-        // TODO: find all Rating, add to model
-        return "rating/list";
-    }
+  private static final String RATINGLINK = "rating";
+  private static final String RATINGREDIRECT = "redirect:/rating/list";
 
-    @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
-        return "rating/add";
-    }
+  @Autowired
+  private RatingService ratingService;
 
-    @PostMapping("/rating/validate")
-    public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
-        return "rating/add";
-    }
+  /**
+   * Add list of Rating to the model and redirect to rating/list
+   *
+   * @return rating/list
+   */
+  @RequestMapping("/rating/list")
+  public String home(Model model) {
+    model.addAttribute(RATINGLINK, ratingService.findAll());
+    return "rating/list";
+  }
 
-    @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
-        return "rating/update";
-    }
+  /**
+   * Redirect to the add menu
+   *
+   * @return rating/add
+   */
+  @GetMapping("/rating/add")
+  public String addRatingForm(Rating rating) {
+    return "rating/add";
+  }
 
-    @PostMapping("/rating/update/{id}")
-    public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
-        return "redirect:/rating/list";
+  /**
+   * Check that the Rating is valid and save it.
+   * Then find all Rating and add them to the model
+   * If it's all good, it redirect to rating/list. If not, it stays on the add page
+   */
+  @PostMapping("/rating/validate")
+  public String validate(@Valid Rating rating, BindingResult result, Model model) {
+    if (!result.hasErrors()) {
+      ratingService.save(rating);
+      model.addAttribute(RATINGLINK, ratingService.findAll());
+      return RATINGREDIRECT;
     }
+    return "rating/add";
+  }
 
-    @GetMapping("/rating/delete/{id}")
-    public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
-        return "redirect:/rating/list";
+  /**
+   * Add the Rating for this ID to the model and redirect to rating/update
+   *
+   * @return rating/update
+   */
+  @GetMapping("/rating/update/{id}")
+  public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    model.addAttribute(RATINGLINK, ratingService.findById(id));
+    return "rating/update";
+  }
+
+  /**
+   * Check that the Rating is valid and update it.
+   * Then find all Rating and add them to the model
+   * If it's all good, it redirect to rating/list. If not, it stays on the update page
+   */
+  @PostMapping("/rating/update/{id}")
+  public String updateRating(@PathVariable("id") Integer id, @Valid Rating ratingToSave,
+      BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      return "rating/update";
     }
+    ratingService.update(ratingToSave, id);
+    model.addAttribute(RATINGLINK, ratingService.findAll());
+    return RATINGREDIRECT;
+  }
+
+  /**
+   * Delete the Rating for this ID
+   *
+   * @return rating/list
+   */
+  @GetMapping("/rating/delete/{id}")
+  public String deleteRating(@PathVariable("id") Integer id, Model model) {
+    ratingService.delete(id);
+    model.addAttribute(RATINGLINK, ratingService.findAll());
+    return RATINGREDIRECT;
+  }
 }

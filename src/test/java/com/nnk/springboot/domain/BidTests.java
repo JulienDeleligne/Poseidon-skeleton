@@ -1,29 +1,26 @@
 package com.nnk.springboot.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
-import com.nnk.springboot.services.BidListService;
-import org.junit.Assert;
+import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-import java.util.Optional;
-
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class BidTests {
 
-//	@Autowired
-//	private BidListRepository bidListRepository;
-/*
-	@Test
-	public void bidListTest() {
+  @Autowired
+  private BidListRepository bidListRepository;
+
+  @Test
+  public void bidListTest() {
     BidList bid = new BidList("Account Test", "Type Test", 10d);
 
     // Save
@@ -44,6 +41,6 @@ public class BidTests {
     Integer id = bid.getBidListId();
     bidListRepository.delete(bid);
     Optional<BidList> bidList = bidListRepository.findById(id);
-    assertThat(bidList).isNotPresent();
-  }*/
+    Assertions.assertThat(bidList).isNotPresent();
+  }
 }

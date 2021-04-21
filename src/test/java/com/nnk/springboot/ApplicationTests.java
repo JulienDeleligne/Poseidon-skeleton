@@ -12,6 +12,6 @@ class ApplicationTests {
   BidListService bidListService;
 
   @Test
-  public void contextLoads() throws Exception {
+  void contextLoads() throws Exception {
   }
 }
