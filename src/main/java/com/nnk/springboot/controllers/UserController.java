@@ -14,12 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * The User controller.
+ */
 @Controller
 public class UserController {
 
   @Autowired
   private UserRepository userRepository;
 
+  /**
+   * Add list of User to the model and redirect to bidList/list
+   *
+   * @return user/list
+   */
   @RolesAllowed("ADMIN")
   @RequestMapping("/user/list")
   public String home(Model model) {
@@ -27,11 +35,21 @@ public class UserController {
     return "user/list";
   }
 
+  /**
+   * Redirect to the add menu
+   *
+   * @return user/add
+   */
   @GetMapping("/user/add")
   public String addUser(User bid) {
     return "user/add";
   }
 
+  /**
+   * Check that the User is valid and save it.
+   * Then find all User and add them to the model
+   * If it's all good, it redirect to user/list. If not, it stays on the add page
+   */
   @PostMapping("/user/validate")
   public String validate(@Valid User user, BindingResult result, Model model) {
     if (!result.hasErrors()) {
@@ -44,6 +62,11 @@ public class UserController {
     return "user/add";
   }
 
+  /**
+   * Add the User for this ID to the model and redirect to user/update
+   *
+   * @return user/update
+   */
   @GetMapping("/user/update/{id}")
   public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
     User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
@@ -52,6 +75,11 @@ public class UserController {
     return "user/update";
   }
 
+  /**
+   * Check that the User is valid and update it.
+   * Then find all User and add them to the model
+   * If it's all good, it redirect to user/list. If not, it stays on the update page
+   */
   @PostMapping("/user/update/{id}")
   public String updateUser(@PathVariable("id") Integer id, @Valid User user,
       BindingResult result, Model model) {
@@ -67,6 +95,11 @@ public class UserController {
     return "redirect:/user/list";
   }
 
+  /**
+   * Delete the User for this ID
+   *
+   * @return user/list
+   */
   @GetMapping("/user/delete/{id}")
   public String deleteUser(@PathVariable("id") Integer id, Model model) {
     User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));

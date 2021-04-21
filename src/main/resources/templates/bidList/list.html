@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'
-      xmlns:sec='http://www.thymeleaf.org/thymeleaf-extras-springsecurity4'
       xmlns:th='http://www.thymeleaf.org'>
 
 <head>
@@ -17,9 +16,7 @@
       <a href='/rating/list'>Ratings</a>&nbsp;|&nbsp;
       <a href='/trade/list'>Trade</a>&nbsp;|&nbsp;
       <a href='/ruleName/list'>Rule</a>&nbsp;|&nbsp;
-      <sec:authorize access="hasAuthority('ADMIN')">
-        <a href='/user/list'>User</a>
-      </sec:authorize>
+      <a href='/user/list'>User</a>
     </div>
     <div class='col-6 text-right'>
       Logged in user: <b class='user' th:inline='text'> [[${#httpServletRequest.remoteUser}]] </b>
